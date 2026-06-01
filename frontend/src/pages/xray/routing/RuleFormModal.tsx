@@ -20,7 +20,7 @@ export interface RoutingRule {
   attrs?: Record<string, string>;
   outboundTag?: string;
   balancerTag?: string;
-
+  
   [key: string]: unknown;
 }
 
@@ -66,14 +66,14 @@ const CommaSeparatedTextArea = ({value, onChange, placeholder}: {
   placeholder?: string;
 }) => {
   const displayValue = value ? value.split(',').join('\n') : '';
-
+  
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const commaSeparated = e.target.value
       .split(/\r?\n/)
       .join(',');
     onChange(commaSeparated);
   };
-
+  
   return (
     <Input.TextArea
       autoSize={{minRows: 2, maxRows: 10}}
@@ -84,20 +84,19 @@ const CommaSeparatedTextArea = ({value, onChange, placeholder}: {
   );
 };
 
-export default function RuleFormModal(
-  {
-    open,
-    rule,
-    inboundTags,
-    outboundTags,
-    balancerTags,
-    onClose,
-    onConfirm,
-  }: RuleFormModalProps) {
+export default function RuleFormModal({
+  open,
+  rule,
+  inboundTags,
+  outboundTags,
+  balancerTags,
+  onClose,
+  onConfirm,
+}: RuleFormModalProps) {
   const {t} = useTranslation();
   const [form, setForm] = useState<FormState>(initialForm);
   const isEdit = rule != null;
-
+  
   useEffect(() => {
     if (!open) return;
     if (rule) {
@@ -120,10 +119,10 @@ export default function RuleFormModal(
       setForm(initialForm());
     }
   }, [open, rule]);
-
+  
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({...prev, [key]: value}));
-
+  
   function submit() {
     const validated = RuleFormSchema.safeParse(form);
     if (!validated.success) return;
@@ -154,12 +153,12 @@ export default function RuleFormModal(
     }
     onConfirm(out);
   }
-
+  
   const title = isEdit
     ? `${t('edit')} ${t('pages.xray.Routings')}`
     : `+ ${t('pages.xray.Routings')}`;
   const okText = isEdit ? t('pages.clients.submitEdit') : t('create');
-
+  
   return (
     <Modal
       open={open}
@@ -190,7 +189,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.xray.ruleForm.sourcePort')}>
               <CommaSeparatedTextArea
@@ -200,7 +199,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.xray.ruleForm.vlessRoute')}>
               <CommaSeparatedTextArea
@@ -211,7 +210,7 @@ export default function RuleFormModal(
             </Form.Item>
           </Col>
         </Row>
-
+        
         <Row gutter={16}>
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.xray.ruleForm.user')}>
@@ -222,7 +221,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.inbounds.network')}>
               <Select
@@ -232,7 +231,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.inbounds.protocol')}>
               <Select
@@ -244,7 +243,7 @@ export default function RuleFormModal(
             </Form.Item>
           </Col>
         </Row>
-
+        
         <Row gutter={16}>
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.xray.ruleForm.inboundTags')}>
@@ -256,7 +255,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.xray.ruleForm.outboundTag')}>
               <Select
@@ -266,7 +265,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item
               label={
@@ -283,7 +282,7 @@ export default function RuleFormModal(
             </Form.Item>
           </Col>
         </Row>
-
+        
         <Row gutter={16}>
           <Col xs={24} md={8}>
             <Form.Item label={'IP'}>
@@ -294,7 +293,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('pages.inbounds.port')}>
               <CommaSeparatedTextArea
@@ -304,7 +303,7 @@ export default function RuleFormModal(
               />
             </Form.Item>
           </Col>
-
+          
           <Col xs={24} md={8}>
             <Form.Item label={t('domainName')}>
               <CommaSeparatedTextArea
@@ -315,21 +314,21 @@ export default function RuleFormModal(
             </Form.Item>
           </Col>
         </Row>
-
+        
         <Form.Item>
           <Space orientation="horizontal">
             <Typography.Text>
               {t('pages.xray.ruleForm.attributes')}
             </Typography.Text>
-
+            
             <Button
               size="small"
               icon={<PlusOutlined/>}
               onClick={() => update('attrs', [...form.attrs, ['', '']])}
             />
-          </Space >
+          </Space>
         </Form.Item>
-
+        
         {form.attrs.length > 0 && (
           <Form.Item>
             {form.attrs.map((attr, idx) => (
